@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Excel Function - SMP Kelas 7</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #0284c7; /* Blue */
+            --secondary: #10b981; /* Green */
+            --primary-light: #e0f2fe;
+            --secondary-light: #d1fae5;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background-color: var(--bg); color: var(--dark);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px; overflow-x: hidden;
+        }
+
+        .container {
+            background: var(--white); width: 100%; max-width: 900px;
+            border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            padding: 40px; position: relative; transition: all 0.3s;
+        }
+
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .text-primary { color: var(--primary); }
+        .text-secondary { color: var(--secondary); }
+        .mb-1 { margin-bottom: 10px; } .mb-2 { margin-bottom: 20px; } .mb-3 { margin-bottom: 30px; }
+
+        h1, h2, h3 { color: var(--primary); margin-bottom: 15px; }
+        h1 { font-size: 2.5rem; text-align: center; }
+
+        /* Buttons */
+        .btn {
+            display: inline-block; width: 100%; padding: 14px 20px;
+            font-size: 16px; font-weight: 600; border: none; border-radius: 12px;
+            cursor: pointer; transition: all 0.3s; margin-bottom: 10px; text-align: center;
+        }
+        .btn-primary { background: var(--primary); color: var(--white); }
+        .btn-primary:hover { background: #0369a1; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(2,132,199,0.3); }
+        .btn-secondary { background: var(--secondary); color: var(--white); }
+        .btn-secondary:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(16,185,129,0.3); }
+        .btn-outline { background: transparent; border: 2px solid #e2e8f0; color: var(--dark); }
+        .btn-outline:hover { background: #f1f5f9; }
+
+        /* Forms */
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--gray); }
+        .form-control {
+            width: 100%; padding: 14px; border: 2px solid #e2e8f0;
+            border-radius: 10px; font-size: 15px; transition: 0.3s;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary); background: var(--primary-light); }
+
+        /* Cards */
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .role-card {
+            padding: 40px 20px; border: 2px solid var(--primary-light);
+            border-radius: 16px; cursor: pointer; transition: 0.3s; text-align: center;
+        }
+        .role-card:hover { border-color: var(--primary); background: var(--primary-light); transform: translateY(-5px); }
+        .role-icon { font-size: 4rem; margin-bottom: 15px; }
+
+        /* Tables */
+        .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 15px; border-bottom: 1px solid #e2e8f0; }
+        th { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+        
+        /* Teacher Slider */
+        .slide-container { background: var(--secondary-light); padding: 30px; border-radius: 16px; position: relative; }
+        .slide { display: none; animation: fadeIn 0.5s; }
+        .slide.active { display: block; }
+        .slide-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        .badge { background: var(--primary); color: white; padding: 4px 10px; border-radius: 6px; font-family: monospace; font-size: 14px; }
+
+        /* Game UI */
+        .progress-bar { width: 100%; height: 12px; background: #e2e8f0; border-radius: 10px; margin-bottom: 25px; overflow: hidden;}
+        .progress-fill { height: 100%; background: var(--secondary); width: 0%; transition: width 0.4s ease; }
+        .game-header { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 15px; color: var(--gray); }
+        .question-box { background: var(--primary-light); padding: 25px; border-radius: 16px; font-size: 18px; margin-bottom: 20px; font-weight: 500; }
+        .feedback { text-align: center; font-weight: bold; min-height: 24px; margin-top: 15px; font-size: 16px; }
+        
+        /* MCQ Options */
+        .mcq-option {
+            display: block; width: 100%; text-align: left; padding: 15px; margin-bottom: 10px;
+            background: var(--white); border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: 0.2s;
+        }
+        .mcq-option:hover { border-color: var(--primary); background: var(--primary-light); }
+
+        /* Drag & Drop */
+        .dnd-container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .dnd-col { flex: 1; min-width: 250px; }
+        .draggable { background: var(--primary); color: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; cursor: grab; text-align: center; font-weight: bold; }
+        .dropzone { background: #f1f5f9; border: 2px dashed #cbd5e1; padding: 15px; margin-bottom: 10px; border-radius: 8px; min-height: 54px; transition: 0.3s; }
+        .dropzone.dragover { background: var(--secondary-light); border-color: var(--secondary); }
+        .dropzone.filled { border: 2px solid var(--secondary); background: white; }
+
+        /* Loader & Result */
+        .loader { border: 6px solid #f3f3f3; border-top: 6px solid var(--primary); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        .score-circle { width: 180px; height: 180px; border-radius: 50%; background: var(--white); border: 12px solid var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 50px; font-weight: 700; color: var(--dark); margin: 0 auto 20px; box-shadow: 0 10px 20px rgba(16,185,129,0.2); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .confetti { position: fixed; width: 10px; height: 10px; z-index: 1000; animation: fall 2.5s linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+        @media(max-width: 768px) { .card-grid { grid-template-columns: 1fr; } h1 { font-size: 2rem; } .container { padding: 25px; } }
+    </style>
+</head>
+<body>
+
+<div class="container" id="app">
+    <div id="view-role">
+        <h1>Mastering Excel Function</h1>
+        <p class="text-center text-gray mb-3">Selamat datang di kelas interaktif SMP Kelas 7. Silakan pilih akses masuk Anda.</p>
+        <div class="card-grid">
+            <div class="role-card" onclick="showView('view-login-guru')">
+                <div class="role-icon">👨‍🏫</div>
+                <h2 class="mb-1">Masuk sebagai Guru</h2>
+                <p class="text-gray">Akses dashboard dan materi mengajar</p>
+            </div>
+            <div class="role-card" onclick="showView('view-login-siswa')">
+                <div class="role-icon">👦</div>
+                <h2 class="mb-1">Masuk sebagai Siswa</h2>
+                <p class="text-gray">Akses ruang tunggu dan arena game</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-login-guru" class="hidden text-center">
+        <h2>Login Guru</h2>
+        <p class="text-gray mb-3">Masukkan kredensial untuk membuka kelas.</p>
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" id="guru-user" class="form-control" placeholder="Nama Guru">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="guru-pass" class="form-control" placeholder="Masukkan password">
+        </div>
+        <button class="btn btn-primary" onclick="loginGuru()">Masuk Dashboard</button>
+        <button class="btn btn-outline" onclick="showView('view-role')">Kembali</button>
+    </div>
+
+    <div id="view-login-siswa" class="hidden text-center">
+        <h2>Registrasi Siswa</h2>
+        <p class="text-gray mb-3">Isi biodata dengan benar sebelum masuk kelas.</p>
+        <div class="form-group">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" id="siswa-nama" class="form-control" placeholder="Contoh: Budi Santoso">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Kelas</label>
+            <select id="siswa-kelas" class="form-control">
+                <option value="7A">7A</option>
+                <option value="7B">7B</option>
+                <option value="7C">7C</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Nomor Absen</label>
+            <input type="number" id="siswa-absen" class="form-control" placeholder="Contoh: 12">
+        </div>
+        <button class="btn btn-secondary" onclick="loginSiswa()">Masuk Kelas</button>
+        <button class="btn btn-outline" onclick="showView('view-role')">Kembali</button>
+    </div>
+
+    <div id="view-dashboard-guru" class="hidden">
+        <h2>Dashboard Guru – Mastering Excel Function</h2>
+        <button class="btn btn-secondary mb-2" id="btn-mulai" onclick="mulaiKelas()" style="font-size: 1.2rem; padding: 18px;">🚀 MULAI KELAS SEKARANG</button>
+        <p id="status-kelas" class="text-center mb-2" style="color: var(--danger); font-weight: bold;">Status: Menunggu Dimulai</p>
+
+        <h3 class="mt-3">Daftar Siswa Login</h3>
+        <div class="table-responsive mb-3">
+            <table>
+                <thead><tr><th>Nama</th><th>Kelas</th><th>Absen</th><th>Status</th></tr></thead>
+                <tbody id="tabel-siswa"></tbody>
+            </table>
+        </div>
+
+        <h3>📚 Materi Pembelajaran (Slide Interaktif)</h3>
+        <div class="slide-container">
+            <div class="slide active">
+                <h3 class="text-secondary">1. Definisi Function</h3>
+                <p><b>Function</b> adalah rumus bawaan Excel yang telah diprogram sebelumnya untuk melakukan perhitungan matematis secara otomatis dan sistematis.</p>
+                <br>
+                <p>💡 Berbeda dengan rumus manual (Formula), Function jauh lebih cepat saat memproses ribuan data tanpa harus mengetik sel satu per satu.</p>
+            </div>
+            <div class="slide">
+                <h3 class="text-secondary">2. Struktur Penulisan Function</h3>
+                <p>Setiap penulisan function <b>wajib</b> mengikuti struktur baku:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Diawali tanda sama dengan <span class="badge">=</span></li>
+                    <li>Diikuti dengan <b>Nama Function</b> (contoh: SUM, AVERAGE)</li>
+                    <li>Tanda kurung buka <span class="badge">(</span></li>
+                    <li><b>Argumen</b> atau rentang data (contoh: A1:A10)</li>
+                    <li>Tanda kurung tutup <span class="badge">)</span></li>
+                </ul>
+                <p class="mt-2">Contoh Sempurna: <span class="badge">=SUM(A1:A10)</span></p>
+            </div>
+            <div class="slide">
+                <h3 class="text-secondary">3. Konsep Argumen & Range</h3>
+                <p><b>Argumen</b> adalah data yang diproses oleh function.</p>
+                <p><b>Range (Rentang)</b> adalah kumpulan sel yang diblok. Ditandai dengan titik dua <span class="badge">:</span>.</p>
+                <br>
+                <p>Contoh: <span class="badge">B2:B5</span> berarti Excel memproses data dari sel B2, B3, B4, hingga B5 sekaligus.</p>
+            </div>
+            <div class="slide">
+                <h3 class="text-secondary">4. Kesalahan Umum (Error)</h3>
+                <p>Siswa sering melakukan kesalahan ini:</p>
+                <table style="background: white; width: 100%; margin-top: 10px; font-size: 14px;">
+                    <tr><th>Penulisan Salah</th><th>Penyebab</th></tr>
+                    <tr><td>SUM(A1:A5)</td><td>Lupa tanda sama dengan (=)</td></tr>
+                    <tr><td>=SUM A1:A5</td><td>Lupa tanda kurung ()</td></tr>
+                    <tr><td>=SUN(A1:A5)</td><td>Typo nama function</td></tr>
+                    <tr><td>=SUM(A1-A5)</td><td>Salah pakai tanda hubung (-) bukan titik dua (:)</td></tr>
+                </table>
+            </div>
+            <div class="slide">
+                <h3 class="text-secondary">5. Lima Function Utama Kelas 7</h3>
+                <p>➕ <b>SUM</b> : Menjumlahkan data numerik. <span class="badge">=SUM(A1:A5)</span></p>
+                <p>➗ <b>AVERAGE</b> : Menghitung nilai rata-rata. <span class="badge">=AVERAGE(A1:A5)</span></p>
+                <p>⬆️ <b>MAX</b> : Mencari nilai tertinggi. <span class="badge">=MAX(A1:A5)</span></p>
+                <p>⬇️ <b>MIN</b> : Mencari nilai terkecil. <span class="badge">=MIN(A1:A5)</span></p>
+                <p>🔢 <b>COUNT</b> : Menghitung <i>banyaknya</i> sel berisi angka. <span class="badge">=COUNT(A1:A5)</span></p>
+            </div>
+
+            <div class="slide-nav">
+                <button class="btn btn-outline" style="width: 48%;" onclick="gantiSlide(-1)">⬅️ Sebelumnya</button>
+                <button class="btn btn-primary" style="width: 48%;" onclick="gantiSlide(1)">Selanjutnya ➡️</button>
+            </div>
+        </div>
+        <button class="btn btn-outline mt-3" onclick="resetSistem()" style="border-color: var(--danger); color: var(--danger);">Reset Sistem Kelas</button>
+    </div>
+
+    <div id="view-ruang-tunggu" class="hidden text-center" style="padding: 50px 0;">
+        <div class="loader"></div>
+        <h2>Menunggu Guru Memulai Kelas...</h2>
+        <p class="text-gray mb-2">Halo, <b id="wait-nama"></b> (<span id="wait-kelas"></span>). Jangan tutup halaman ini.</p>
+        <p>Game interaktif akan otomatis terbuka saat guru menekan tombol mulai.</p>
+    </div>
+
+    <div id="view-game" class="hidden">
+        <div class="game-header">
+            <span id="game-title">Game 1: Concept Quiz</span>
+            <span>Skor: <b id="skor-live" class="text-primary">0</b></span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        
+        <div id="game-container">
+            </div>
+
+        <div id="feedback-msg" class="feedback"></div>
+        <button class="btn btn-primary mt-2 hidden" id="btn-next-game" onclick="nextQuestion()">Lanjut Soal ➡️</button>
+    </div>
+
+    <div id="view-hasil" class="hidden text-center">
+        <h2>🎉 Selesai! 🎉</h2>
+        <p class="mb-2">Kerja bagus, <b id="hasil-nama" class="text-primary"></b>!</p>
+        
+        <div class="score-circle" id="hasil-skor">100</div>
+        
+        <h3 id="hasil-kategori" class="mb-3">Excel Function Master</h3>
+        
+        <button class="btn btn-primary" onclick="keluarKeAwal()">Keluar / Selesai</button>
+    </div>
+</div>
+
+<script>
+    /* =========================================
+       SISTEM DATABASE LOKAL (Simulasi Backend)
+       ========================================= */
+    if(!localStorage.getItem('excel_students')) localStorage.setItem('excel_students', JSON.stringify([]));
+    if(!localStorage.getItem('excel_isStarted')) localStorage.setItem('excel_isStarted', 'false');
+
+    let intervalId;
+    let currentUser = {};
+
+    /* =========================================
+       NAVIGASI VIEW UMUM
+       ========================================= */
+    function showView(viewId) {
+        document.querySelectorAll('#app > div').forEach(el => el.classList.add('hidden'));
+        document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    /* =========================================
+       LOGIKA GURU
+       ========================================= */
+    function loginGuru() {
+        const pass = document.getElementById('guru-pass').value;
+        if(pass === 'Gurutik@2026') {
+            showView('view-dashboard-guru');
+            mulaiMonitorSiswa();
+        } else {
+            alert('Password salah! Hubungi administrator.');
+        }
+    }
+
+    function mulaiMonitorSiswa() {
+        intervalId = setInterval(() => {
+            const students = JSON.parse(localStorage.getItem('excel_students'));
+            const isStarted = localStorage.getItem('excel_isStarted') === 'true';
+            
+            const tbody = document.getElementById('tabel-siswa');
+            tbody.innerHTML = '';
+            students.forEach(s => {
+                tbody.innerHTML += `<tr>
+                    <td>${s.nama}</td><td>${s.kelas}</td><td>${s.absen}</td>
+                    <td><span class="badge" style="background:${isStarted ? 'var(--secondary)' : 'var(--warning)'}">
+                        ${isStarted ? 'Bermain 🎮' : 'Menunggu ⏳'}</span>
+                    </td></tr>`;
+            });
+
+            if(isStarted) {
+                document.getElementById('btn-mulai').style.display = 'none';
+                document.getElementById('status-kelas').innerText = "Status: Kelas Sedang Berjalan Aktif";
+                document.getElementById('status-kelas').style.color = "var(--secondary)";
+            }
+        }, 1000);
+    }
+
+    function mulaiKelas() {
+        localStorage.setItem('excel_isStarted', 'true');
+    }
+
+    function resetSistem() {
+        if(confirm('Yakin reset sistem? Semua data siswa akan hilang.')){
+            localStorage.setItem('excel_students', JSON.stringify([]));
+            localStorage.setItem('excel_isStarted', 'false');
+            location.reload();
+        }
+    }
+
+    // Slider Logic
+    let slideIndex = 0;
+    function gantiSlide(n) {
+        const slides = document.querySelectorAll('.slide');
+        slides[slideIndex].classList.remove('active');
+        slideIndex += n;
+        if(slideIndex >= slides.length) slideIndex = 0;
+        if(slideIndex < 0) slideIndex = slides.length - 1;
+        slides[slideIndex].classList.add('active');
+    }
+
+    /* =========================================
+       LOGIKA SISWA & GAME ENGINE
+       ========================================= */
+    function loginSiswa() {
+        const nama = document.getElementById('siswa-nama').value.trim();
+        const kelas = document.getElementById('siswa-kelas').value;
+        const absen = document.getElementById('siswa-absen').value.trim();
+
+        if(!nama || !absen) { alert('Harap isi semua biodata!'); return; }
+
+        currentUser = { nama, kelas, absen, skor: 0 };
+        let students = JSON.parse(localStorage.getItem('excel_students'));
+        students.push(currentUser);
+        localStorage.setItem('excel_students', JSON.stringify(students));
+
+        document.getElementById('wait-nama').innerText = nama;
+        document.getElementById('wait-kelas').innerText = kelas;
+        showView('view-ruang-tunggu');
+
+        intervalId = setInterval(() => {
+            if(localStorage.getItem('excel_isStarted') === 'true') {
+                clearInterval(intervalId);
+                inisialisasiGame();
+            }
+        }, 1000);
+    }
+
+    // DATA BANK SOAL (25 Soal Total)
+    const games = [
+        {
+            title: "Game 1: Concept Quiz", type: "mcq",
+            questions: [
+                { q: "Apa definisi dari Function di Excel?", options: ["Rumus yang diketik manual panjang", "Rumus bawaan Excel untuk perhitungan otomatis", "Program untuk menggambar", "Alat untuk menghapus teks"], a: 1 },
+                { q: "Setiap penulisan function wajib diawali dengan tanda...", options: ["Tanda Kutip ( \" )", "Tanda Tambah ( + )", "Tanda Sama Dengan ( = )", "Tanda Kurung ( () )"], a: 2 },
+                { q: "Apa fungsi tanda titik dua ( : ) dalam A1:A5?", options: ["Membagi sel A1 dengan A5", "Menandakan rentang (range) dari A1 sampai A5", "Menghapus sel A1 dan A5", "Memisahkan sel menjadi dua"], a: 1 },
+                { q: "Manakah penulisan struktur function yang paling tepat?", options: ["SUM=(A1:A5)", "=SUM(A1:A5)", "=SUM A1:A5", "SUM(A1:A5)="], a: 1 },
+                { q: "Mengapa menggunakan function lebih efisien daripada formula manual?", options: ["Karena lebih cepat dan akurat memproses data dalam jumlah besar", "Karena warnanya lebih bagus", "Karena file Excel menjadi lebih kecil", "Karena tidak perlu pakai keyboard"], a: 0 }
+            ]
+        },
+        {
+            title: "Game 2: Write The Function", type: "input",
+            questions: [
+                { q: "Tulis function untuk <b>MENJUMLAHKAN</b> data dari sel B1 sampai B10", a: "=SUM(B1:B10)" },
+                { q: "Tulis function untuk mencari <b>RATA-RATA</b> dari sel C1 sampai C5", a: "=AVERAGE(C1:C5)" },
+                { q: "Tulis function untuk mencari nilai <b>TERTINGGI</b> dari sel D1 sampai D10", a: "=MAX(D1:D10)" },
+                { q: "Tulis function untuk mencari nilai <b>TERENDAH</b> dari sel E1 sampai E5", a: "=MIN(E1:E5)" },
+                { q: "Tulis function untuk <b>MENGHITUNG JUMLAH SEL ANGKA</b> dari F1 sampai F20", a: "=COUNT(F1:F20)" }
+            ]
+        },
+        {
+            title: "Game 3: Fix The Formula (HOTS)", type: "input",
+            questions: [
+                { q: "Perbaiki rumus yang salah ini: <br><b class='text-danger'>SUM(A1:A5)</b>", a: "=SUM(A1:A5)" },
+                { q: "Perbaiki rumus yang salah ini: <br><b class='text-danger'>=AVERAGE A1:A10</b>", a: "=AVERAGE(A1:A10)" },
+                { q: "Perbaiki rentang yang salah ini (menggunakan kurang bukan titik dua): <br><b class='text-danger'>=MAX(B1-B5)</b>", a: "=MAX(B1:B5)" },
+                { q: "Perbaiki penulisan nama fungsi yang typo ini: <br><b class='text-danger'>=MINUM(C1:C10)</b>", a: "=MIN(C1:C10)" },
+                { q: "Perbaiki kesalahan penggunaan kurung siku ini: <br><b class='text-danger'>=COUNT[D1:D5]</b>", a: "=COUNT(D1:D5)" }
+            ]
+        },
+        {
+            title: "Game 4: Drag and Match", type: "dnd",
+            items: ["SUM", "AVERAGE", "MAX", "MIN", "COUNT"],
+            targets: [
+                { id: "tgt-0", text: "Menghitung Rata-rata", correct: "AVERAGE" },
+                { id: "tgt-1", text: "Menjumlahkan Data", correct: "SUM" },
+                { id: "tgt-2", text: "Mencari Nilai Terkecil", correct: "MIN" },
+                { id: "tgt-3", text: "Menghitung Jumlah Sel Angka", correct: "COUNT" },
+                { id: "tgt-4", text: "Mencari Nilai Terbesar", correct: "MAX" }
+            ]
+        },
+        {
+            title: "Game 5: Case Study Challenge", type: "mcq_case",
+            tableHTML: `
+                <table class="mb-2" style="font-size:14px; background:white;">
+                    <tr style="background:#e2e8f0;"><th></th><th>A (Nama)</th><th>B (Matematika)</th><th>C (IPA)</th></tr>
+                    <tr><td><b>1</b></td><td>Budi</td><td>80</td><td>85</td></tr>
+                    <tr><td><b>2</b></td><td>Siti</td><td>90</td><td>95</td></tr>
+                    <tr><td><b>3</b></td><td>Andi</td><td>75</td><td>80</td></tr>
+                </table>
+            `,
+            questions: [
+                { q: "Function apa yang tepat untuk menjumlahkan nilai Matematika dan IPA milik Budi?", options: ["=SUM(A1:A2)", "=SUM(B1:C1)", "=AVERAGE(B1:C1)"], a: 1 },
+                { q: "Function apa yang tepat untuk mencari Rata-rata nilai Matematika seluruh siswa?", options: ["=AVERAGE(B1:B3)", "=SUM(B1:B3)", "=MAX(B1:B3)"], a: 0 },
+                { q: "Function apa untuk mencari nilai tertinggi di mata pelajaran IPA?", options: ["=MIN(C1:C3)", "=MAX(C1:C3)", "=MAX(B1:C3)"], a: 1 },
+                { q: "Function apa untuk mengetahui nilai Matematika terendah?", options: ["=MIN(B1:B3)", "=MIN(C1:C3)", "=MAX(B1:B3)"], a: 0 },
+                { q: "Function apa untuk menghitung ada berapa jumlah siswa yang memiliki nilai angka di kolom IPA?", options: ["=SUM(C1:C3)", "=COUNT(C1:C3)", "=AVERAGE(C1:C3)"], a: 1 }
+            ]
+        }
+    ];
+
+    let currentGameIdx = 0;
+    let currentSubIdx = 0;
+    let skorTotal = 0;
+    const maxScore = 25 * 4; // 25 pertanyaan x 4 poin = 100 poin total
+
+    function inisialisasiGame() {
+        showView('view-game');
+        renderPertanyaan();
+    }
+
+    function renderPertanyaan() {
+        document.getElementById('btn-next-game').classList.add('hidden');
+        document.getElementById('feedback-msg').innerText = '';
+        
+        let game = games[currentGameIdx];
+        document.getElementById('game-title').innerText = game.title;
+        let container = document.getElementById('game-container');
+        container.innerHTML = '';
+
+        // Hitung Progress (Total 25 soal + 1 untuk state DnD disederhanakan sebagai 5 step)
+        let totalStepsDone = (currentGameIdx * 5) + currentSubIdx; 
+        document.getElementById('progress-fill').style.width = `${(totalStepsDone / 25) * 100}%`;
+
+        // Render Berdasarkan Tipe Game
+        if(game.type === "mcq") {
+            let qData = game.questions[currentSubIdx];
+            container.innerHTML = `<div class="question-box">${currentSubIdx + 1}. ${qData.q}</div>`;
+            qData.options.forEach((opt, idx) => {
+                container.innerHTML += `<button class="mcq-option" onclick="cekMCQ(${idx}, ${qData.a})">${opt}</button>`;
+            });
+        } 
+        else if(game.type === "input") {
+            let qData = game.questions[currentSubIdx];
+            container.innerHTML = `
+                <div class="question-box">${currentSubIdx + 1}. ${qData.q}</div>
+                <input type="text" id="jawaban-input" class="form-control mb-2" placeholder="Ketik jawaban diawali = ..." autocomplete="off">
+                <button class="btn btn-secondary" onclick="cekInput('${qData.a}')">Kirim Jawaban</button>
+            `;
+            setTimeout(() => document.getElementById('jawaban-input').focus(), 100);
+        }
+        else if(game.type === "dnd") {
+            // Drag and Drop Logic Render
+            let html = `<div class="question-box">Tarik kotak biru (Function) ke kotak putih (Penjelasan) yang tepat!</div><div class="dnd-container">`;
+            
+            // Kolom Draggable
+            html += `<div class="dnd-col" id="drag-source">`;
+            game.items.forEach(item => {
+                html += `<div class="draggable" draggable="true" id="drag-${item}">${item}</div>`;
+            });
+            html += `</div>`;
+
+            // Kolom Dropzone
+            html += `<div class="dnd-col">`;
+            game.targets.forEach(tgt => {
+                html += `<div class="dropzone" id="${tgt.id}" data-correct="${tgt.correct}">${tgt.text}</div>`;
+            });
+            html += `</div></div>`;
+            
+            container.innerHTML = html;
+            setupDragAndDrop();
+        }
+        else if(game.type === "mcq_case") {
+            let qData = game.questions[currentSubIdx];
+            container.innerHTML = game.tableHTML + `<div class="question-box mt-2">${currentSubIdx + 1}. ${qData.q}</div>`;
+            qData.options.forEach((opt, idx) => {
+                container.innerHTML += `<button class="mcq-option" onclick="cekMCQ(${idx}, ${qData.a})">${opt}</button>`;
+            });
+        }
+    }
+
+    // Pengecekan Jawaban MCQ
+    function cekMCQ(selectedIndex, correctIndex) {
+        if(selectedIndex === correctIndex) { benar(); } else { salah(); }
+    }
+
+    // Pengecekan Jawaban Input (Case Insensitive & Hapus Spasi)
+    function cekInput(correctAnswer) {
+        let userAns = document.getElementById('jawaban-input').value.toUpperCase().replace(/\s+/g, '');
+        if(userAns === correctAnswer) { benar(); } else { salah(); }
+    }
+
+    // Reaksi Jawaban
+    function benar() {
+        skorTotal += 4;
+        document.getElementById('skor-live').innerText = skorTotal;
+        tampilFeedback("🎉 Benar!", "var(--secondary)");
+        tembakConfetti();
+        document.getElementById('btn-next-game').classList.remove('hidden');
+        kunciJawaban();
+    }
+
+    function salah() {
+        tampilFeedback("❌ Coba Lagi! Jawaban belum tepat.", "var(--danger)");
+    }
+
+    function tampilFeedback(pesan, warna) {
+        let fb = document.getElementById('feedback-msg');
+        fb.innerText = pesan; fb.style.color = warna;
+    }
+
+    function kunciJawaban() {
+        // Disable tombol atau input agar tidak bisa dijawab ganda
+        document.querySelectorAll('.mcq-option').forEach(btn => btn.onclick = null);
+        let inputEl = document.getElementById('jawaban-input');
+        if(inputEl) inputEl.disabled = true;
+    }
+
+    // Navigasi Next Question
+    function nextQuestion() {
+        currentSubIdx++;
+        let game = games[currentGameIdx];
+        
+        // Cek apakah sub-question habis
+        if(currentSubIdx >= game.questions?.length || (game.type === 'dnd' && currentSubIdx >= 1)) {
+            currentGameIdx++;
+            currentSubIdx = 0;
+        }
+
+        if(currentGameIdx >= games.length) {
+            akhiriGame();
+        } else {
+            renderPertanyaan();
+        }
+    }
+
+    /* =========================================
+       Fungsi Khusus Drag & Drop (Game 4)
+       ========================================= */
+    let dndMatches = 0;
+    function setupDragAndDrop() {
+        const draggables = document.querySelectorAll('.draggable');
+        const dropzones = document.querySelectorAll('.dropzone');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => {
+                draggable.classList.add('dragging');
+            });
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
+            });
+        });
+
+        dropzones.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                if(!zone.classList.contains('filled')) zone.classList.add('dragover');
+            });
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('dragover');
+            });
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+                
+                const draggable = document.querySelector('.dragging');
+                if(!draggable || zone.classList.contains('filled')) return;
+
+                const draggedText = draggable.innerText;
+                const correctText = zone.getAttribute('data-correct');
+
+                if(draggedText === correctText) {
+                    zone.innerText = `${zone.innerText} : =${correctText}()`;
+                    zone.classList.add('filled');
+                    draggable.remove(); // Hilangkan dari daftar
+                    skorTotal += 4;
+                    document.getElementById('skor-live').innerText = skorTotal;
+                    tembakConfetti();
+                    dndMatches++;
+
+                    if(dndMatches === 5) {
+                        tampilFeedback("🎉 Luar Biasa! Semua Cocok.", "var(--secondary)");
+                        document.getElementById('btn-next-game').classList.remove('hidden');
+                        currentSubIdx = 1; // trigger skip next
+                    }
+                } else {
+                    tampilFeedback("❌ Salah pasangkan! Coba cocokkan ke kotak lain.", "var(--danger)");
+                    setTimeout(() => tampilFeedback("",""), 2000);
+                }
+            });
+        });
+    }
+
+    /* =========================================
+       Hasil Akhir & Efek
+       ========================================= */
+    function akhiriGame() {
+        showView('view-hasil');
+        document.getElementById('hasil-nama').innerText = currentUser.nama;
+        document.getElementById('hasil-skor').innerText = skorTotal;
+        
+        let kat = document.getElementById('hasil-kategori');
+        if(skorTotal >= 90) { kat.innerText = "🌟 Excel Function Master 🌟"; kat.style.color = "var(--secondary)"; }
+        else if(skorTotal >= 70) { kat.innerText = "🚀 Function Explorer"; kat.style.color = "var(--primary)"; }
+        else { kat.innerText = "💪 Perlu Latihan Lagi"; kat.style.color = "var(--danger)"; }
+    }
+
+    function keluarKeAwal() {
+        location.reload(); // Refresh untuk reset memori browser lokal siswa
+    }
+
+    function tembakConfetti() {
+        for(let i=0; i<35; i++) {
+            let conf = document.createElement('div');
+            conf.classList.add('confetti');
+            conf.style.left = Math.random() * 100 + 'vw';
+            conf.style.backgroundColor = ['#0284c7', '#10b981', '#f59e0b', '#ef4444'][Math.floor(Math.random()*4)];
+            document.body.appendChild(conf);
+            setTimeout(() => conf.remove(), 2500);
+        }
+    }
+
+</script>
+</body>
+</html>
